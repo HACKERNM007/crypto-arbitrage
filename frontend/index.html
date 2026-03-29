@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Arbitrage Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center">Crypto Arbitrage Dashboard</h1>
+        <div id="arbitrage-opportunities" class="mt-10">
+            <table class="min-w-full border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2">Exchange</th>
+                        <th class="border border-gray-300 px-4 py-2">Asset</th>
+                        <th class="border border-gray-300 px-4 py-2">Buy Price</th>
+                        <th class="border border-gray-300 px-4 py-2">Sell Price</th>
+                        <th class="border border-gray-300 px-4 py-2">Profit</th>
+                    </tr>
+                </thead>
+                <tbody id="opportunity-list">
+                    <!-- Opportunities will be injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const fetchOpportunities = async () => {
+            const response = await fetch('https://backend_api_endpoint_here/arbitrage'); // replace with your API endpoint
+            const data = await response.json();
+            const opportunityList = document.getElementById('opportunity-list');
+            opportunityList.innerHTML = '';
+            data.forEach(opportunity => {
+                const row = `<tr>
+                                <td class="border border-gray-300 px-4 py-2">${opportunity.exchange}</td>
+                                <td class="border border-gray-300 px-4 py-2">${opportunity.asset}</td>
+                                <td class="border border-gray-300 px-4 py-2">${opportunity.buyPrice}</td>
+                                <td class="border border-gray-300 px-4 py-2">${opportunity.sellPrice}</td>
+                                <td class="border border-gray-300 px-4 py-2">${opportunity.profit}</td>
+                            </tr>`;
+                opportunityList.innerHTML += row;
+            });
+        };
+        setInterval(fetchOpportunities, 5000);
+        window.onload = fetchOpportunities;
+    </script>
+</body>
+</html>
